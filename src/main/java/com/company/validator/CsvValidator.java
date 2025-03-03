@@ -53,22 +53,22 @@ public class CsvValidator {
                     " employees, which exceeds the maximum limit of 1000");
         }
 
-        // Check for duplicate IDs (should be handled by map, but just in case)
+
         if (employees.size() < countUniqueIds(employees)) {
             throw new InvalidDataException("CSV file contains duplicate employee IDs");
         }
 
-        // Check for required fields and valid values
+
         for (Employee employee : employees.values()) {
             validateEmployee(employee);
         }
 
-        // Check for valid manager references
+
         validateManagerReferences(employees);
     }
 
 
-    // Helper methods
+
 
     private int countUniqueIds(Map<String, Employee> employees) {
         Set<String> uniqueIds = new HashSet<>();
@@ -101,7 +101,6 @@ public class CsvValidator {
                         ") references a non-existent manager with ID: " + managerId);
             }
 
-            // Self-reference check
             if (managerId != null && managerId.equals(employee.getId())) {
                 throw new InvalidDataException("Employee " + employee.getName() + " (ID: " + employee.getId() +
                         ") cannot be their own manager");

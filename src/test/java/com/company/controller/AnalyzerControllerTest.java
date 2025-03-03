@@ -34,7 +34,6 @@ class AnalyzerControllerTest {
 
     @BeforeEach
     void setUp() {
-        // Create a mock CSV file to use in tests
         csvFile = new MockMultipartFile(
                 "file",
                 "employees.csv",
@@ -45,7 +44,7 @@ class AnalyzerControllerTest {
 
     @Test
     void getUnderpaidManagers_shouldReturnOkResponse() throws Exception {
-        // Prepare test data
+
         SalaryIssueDto underpaidManager = new SalaryIssueDto();
         underpaidManager.setManagerId("3");
         underpaidManager.setManagerName("Manager3");
@@ -56,10 +55,10 @@ class AnalyzerControllerTest {
 
         List<SalaryIssueDto> underpaidManagers = Collections.singletonList(underpaidManager);
 
-        // Mock service
+
         when(analyzerService.getUnderpaidManagers(any())).thenReturn(underpaidManagers);
 
-        // Perform request and verify
+
         mockMvc.perform(multipart("/api/v1/managers/underpaid")
                         .file(csvFile))
                 .andExpect(status().isOk())
@@ -68,16 +67,16 @@ class AnalyzerControllerTest {
                 .andExpect(jsonPath("$[0].managerName").value("Manager3"))
                 .andExpect(jsonPath("$[0].salaryDifference").value(-13200));
 
-        // Verify service was called
+
         verify(analyzerService, times(1)).getUnderpaidManagers(any());
     }
 
     @Test
     void getUnderpaidManagers_whenNoUnderpaidManagers_shouldReturnEmptyList() throws Exception {
-        // Mock service to return empty list
+
         when(analyzerService.getUnderpaidManagers(any())).thenReturn(Collections.emptyList());
 
-        // Perform request and verify
+
         mockMvc.perform(multipart("/api/v1/managers/underpaid")
                         .file(csvFile))
                 .andExpect(status().isOk())
@@ -85,13 +84,12 @@ class AnalyzerControllerTest {
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$").isEmpty());
 
-        // Verify service was called
+
         verify(analyzerService, times(1)).getUnderpaidManagers(any());
     }
 
     @Test
     void getOverpaidManagers_shouldReturnOkResponse() throws Exception {
-        // Prepare test data
         SalaryIssueDto overpaidManager1 = new SalaryIssueDto();
         overpaidManager1.setManagerId("5");
         overpaidManager1.setManagerName("Manager5");
@@ -109,11 +107,9 @@ class AnalyzerControllerTest {
         overpaidManager2.setSalaryDifference(7500);
 
         List<SalaryIssueDto> overpaidManagers = Arrays.asList(overpaidManager1, overpaidManager2);
-
-        // Mock service
         when(analyzerService.getOverpaidManagers(any())).thenReturn(overpaidManagers);
 
-        // Perform request and verify
+
         mockMvc.perform(multipart("/api/v1/managers/overpaid")
                         .file(csvFile))
                 .andExpect(status().isOk())
@@ -125,16 +121,16 @@ class AnalyzerControllerTest {
                 .andExpect(jsonPath("$[1].managerName").value("Manager7"))
                 .andExpect(jsonPath("$[1].salaryDifference").value(7500));
 
-        // Verify service was called
+
         verify(analyzerService, times(1)).getOverpaidManagers(any());
     }
 
     @Test
     void getOverpaidManagers_whenNoOverpaidManagers_shouldReturnEmptyList() throws Exception {
-        // Mock service to return empty list
+
         when(analyzerService.getOverpaidManagers(any())).thenReturn(Collections.emptyList());
 
-        // Perform request and verify
+
         mockMvc.perform(multipart("/api/v1/managers/overpaid")
                         .file(csvFile))
                 .andExpect(status().isOk())
@@ -142,13 +138,12 @@ class AnalyzerControllerTest {
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$").isEmpty());
 
-        // Verify service was called
+
         verify(analyzerService, times(1)).getOverpaidManagers(any());
     }
 
     @Test
     void getLongReportingLines_shouldReturnOkResponse() throws Exception {
-        // Prepare test data
         ReportingLineDto reportingLine = new ReportingLineDto();
         reportingLine.setEmployeeId("22");
         reportingLine.setEmployeeName("Employee22");
@@ -157,10 +152,8 @@ class AnalyzerControllerTest {
 
         List<ReportingLineDto> reportingLines = Collections.singletonList(reportingLine);
 
-        // Mock service
         when(analyzerService.getLongReportingLines(any())).thenReturn(reportingLines);
 
-        // Perform request and verify
         mockMvc.perform(multipart("/api/v1/employees/long-reporting-lines")
                         .file(csvFile))
                 .andExpect(status().isOk())
@@ -170,16 +163,15 @@ class AnalyzerControllerTest {
                 .andExpect(jsonPath("$[0].reportingLineDepth").value(6))
                 .andExpect(jsonPath("$[0].excess").value(2));
 
-        // Verify service was called
+
         verify(analyzerService, times(1)).getLongReportingLines(any());
     }
 
     @Test
     void getLongReportingLines_whenNoLongReportingLines_shouldReturnEmptyList() throws Exception {
-        // Mock service to return empty list
         when(analyzerService.getLongReportingLines(any())).thenReturn(Collections.emptyList());
 
-        // Perform request and verify
+
         mockMvc.perform(multipart("/api/v1/employees/long-reporting-lines")
                         .file(csvFile))
                 .andExpect(status().isOk())
@@ -187,7 +179,7 @@ class AnalyzerControllerTest {
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$").isEmpty());
 
-        // Verify service was called
+
         verify(analyzerService, times(1)).getLongReportingLines(any());
     }
 

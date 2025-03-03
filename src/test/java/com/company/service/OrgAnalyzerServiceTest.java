@@ -37,22 +37,22 @@ class OrgAnalyzerServiceTest {
 
     @BeforeEach
     void setUp() {
-        // Set up sample CSV content for testing
+
         csvContent = "id,name,salary,manager_id\n" +
                 "1,CEO,200000,\n" +
                 "2,CFO,150000,1\n" +
                 "3,CTO,140000,1\n" +
                 "4,Manager1,80000,2\n" +
-                "5,Manager2,120000,2\n" +  // Overpaid manager (>50% of avg subordinate salary)
-                "6,Manager3,75000,3\n" +    // Underpaid manager (<20% of avg subordinate salary)
+                "5,Manager2,120000,2\n" +
+                "6,Manager3,75000,3\n" +
                 "7,Employee1,60000,4\n" +
                 "8,Employee2,65000,4\n" +
                 "9,Employee3,70000,5\n" +
                 "10,Employee4,80000,5\n" +
                 "11,Employee5,70000,6\n" +
                 "12,Employee6,65000,6\n" +
-                "13,Employee7,60000,7\n" +   // Deep reporting line (depth = 5)
-                "14,Employee8,55000,13\n";   // Deeper reporting line (depth = 6)
+                "13,Employee7,60000,7\n" +
+                "14,Employee8,55000,13\n";
 
         mockCsvFile = new MockMultipartFile(
                 "employees.csv",
@@ -111,7 +111,7 @@ class OrgAnalyzerServiceTest {
 
     @Test
     void getUnderpaidManagers_withEmptyList_shouldReturnEmptyList() throws IOException {
-        // Create CSV with no underpaid managers
+
         String csvWithNoUnderpaidManagers = "id,name,salary,manager_id\n" +
                 "1,CEO,200000,\n" +
                 "2,Manager,120000,1\n" +
@@ -134,7 +134,7 @@ class OrgAnalyzerServiceTest {
 
     @Test
     void getOverpaidManagers_withEmptyList_shouldReturnEmptyList() throws IOException {
-        // Create CSV with no overpaid managers
+
         String csvWithNoOverpaidManagers = "id,name,salary,manager_id\n" +
                 "1,CEO,150000,\n" +
                 "2,Manager,100000,1\n" +
@@ -157,7 +157,7 @@ class OrgAnalyzerServiceTest {
 
     @Test
     void getLongReportingLines_withNoLongLines_shouldReturnEmptyList() throws IOException {
-        // Create CSV with no long reporting lines
+
         String csvWithNoLongLines = "id,name,salary,manager_id\n" +
                 "1,CEO,200000,\n" +
                 "2,Manager,100000,1\n" +
@@ -191,7 +191,7 @@ class OrgAnalyzerServiceTest {
         assertNotNull(result);
         assertTrue(result.isEmpty());
 
-        // Verify validator was called
+
         verify(csvValidator).validateFile(badFile);
     }
 
